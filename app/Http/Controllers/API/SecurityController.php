@@ -13,6 +13,26 @@ use Illuminate\Support\Facades\Validator;
 
 class SecurityController extends BaseController
 {
+    function findPhone(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'phone' => 'required|string',
+            'country_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError($validator, 'User login failed.');
+        }
+        $customer=User::query()->firstWhere(['phone'=>$request->phone]);
+        if (is_null($customer)){
+            return $this->sendError('User not found','User not found');
+        }
+        if ($customer->country_id != $request->country_id){
+            return $this->sendError('User not found','User not found');
+        }
+        return $this->sendResponse([], 'Phone verify successfully.');
+    }
     function authenticate(Request $request){
         $validator = Validator::make($request->all(), [
             'phone' => 'required|string',

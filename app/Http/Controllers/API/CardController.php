@@ -27,7 +27,7 @@ class CardController extends BaseController
             return $this->sendError($validator->getException(), 'User login failed.');
         }
         if ($customer->balance<$request->amount){
-            return $this->sendError("Balance error", 'User login failed.');
+           // return $this->sendError("Balance error", 'User login failed.');
         }
         $card=new Card();
         $card->name=$request->name;
@@ -35,6 +35,7 @@ class CardController extends BaseController
         $card->solde=$request->amount;
         $card->status=Helper::PROCESSING;
         $card->card_type=$request->card_type;
+        $card->model=$request->card_model;
         $card->save();
         $customer->balance-=$request->amount;
         $customer->save();
@@ -85,6 +86,8 @@ class CardController extends BaseController
                     "status" => $list->status,
                     "expired_date" => date_format($list->created_at, "y/m"),
                     "solde" => $list->solde,
+                    "card_type" => $list->card_type,
+                    "card_model" => $list->model,
                     "customer_id" => $list->user_id,
                     "customer_name" => is_null($list->customer) ? "" : $list->customer->first_name . ' ' . $list->customer->last_name,
                     "expired_date_format" => date_format($list->created_at, "Y-m-d"),
@@ -122,6 +125,8 @@ class CardController extends BaseController
                     "status" => $list->status,
                     "expired_date" => $list->expired_date,
                     "solde" => $list->solde,
+                    "card_type" => $list->card_type,
+                    "card_model" => $list->model,
                     "customer_id" => $list->user_id,
                     "customer_name" => is_null($list->customer) ? "" : $list->customer->first_name . ' ' . $list->customer->last_name,
                     "expired_date_format" => date_format($list->created_at, "Y-m-d"),

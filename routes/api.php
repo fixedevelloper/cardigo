@@ -11,6 +11,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 Route::post('authenticate', [SecurityController::class, 'authenticate']);
+Route::post('authenticate/phone', [SecurityController::class, 'findPhone']);
 Route::get('countries', [StaticController::class, 'countries']);
 Route::get('transactions', [TransactionController::class, 'transactions']);
 Route::get('transactions/{id}/list', [TransactionController::class, 'transaction_customer']);
